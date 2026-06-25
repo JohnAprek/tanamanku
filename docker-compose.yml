@@ -1,0 +1,26 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      # PENTING: hanya dengarkan di localhost laptop.
+      # Akses dari luar (iPad dll.) lewat Tailscale Serve, BUKAN buka port ke LAN/router.
+      - "127.0.0.1:5678:5678"
+    environment:
+      # Hostname Tailscale (MagicDNS) laptop kamu. Contoh: tanamanku.tailabcd.ts.net
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=5678
+      # Tailscale Serve yang meng-handle TLS, tapi n8n harus tahu URL akhirnya https
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-https}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      # n8n berada di belakang 1 reverse proxy (Tailscale Serve)
+      - N8N_PROXY_HOPS=1
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-Asia/Jakarta}
+      - TZ=${TZ:-Asia/Jakarta}
+    volumes:
+      # Data, workflow, dan kredensial tersimpan permanen di volume ini
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:

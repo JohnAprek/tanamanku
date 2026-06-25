@@ -1,0 +1,6 @@
+# Konfigurasi lokal yang berisi nilai spesifik laptop / rahasia
+.env
+
+# Data n8n lokal (kalau ada yang ter-bind ke folder)
+.n8n/
+n8n_data/
